@@ -1,0 +1,38 @@
+@startuml
+
+title AWS VPC Network
+
+cloud "Internet" as internet
+rectangle "Internet Gateway" as igw
+
+rectangle "Public Route Table\n(associated with both Public Subnets)" as public_rt
+
+rectangle "Public Subnet A\n10.0.1.0/24" as public_a
+rectangle "Public Subnet B\n10.0.2.0/24" as public_b
+
+rectangle "NAT Gateway A" as nat_a
+rectangle "NAT Gateway B" as nat_b
+
+rectangle "Private Route A" as private_rt_a
+rectangle "Private Route B" as private_rt_b
+
+rectangle "Private Subnet A\n10.0.11.0/24" as private_a
+rectangle "Private Subnet B\n10.0.12.0/24" as private_b
+
+
+internet --> igw
+igw --> public_rt
+
+public_rt --> public_a
+public_rt --> public_b
+
+public_a --> nat_a
+public_b --> nat_b
+
+nat_a --> private_rt_a
+nat_b --> private_rt_b
+
+private_rt_a --> private_a
+private_rt_b --> private_b
+
+@enduml
