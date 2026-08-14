@@ -49,6 +49,9 @@ Dự án này lưu trữ các bài học, lab và ví dụ về Infrastructure a
 - Nắm các loại lưu trữ S3 như Intelligent-Tiering, Glacier, ...
 - Quản lý versioning trong S3
 - Hiểu ACLs và NACLs
+- Ôn tập kỹ hơn về VPC (NAT Gateway, Internet Gateway, EIP, Route Table,...)
+- Cách tổ chức DRY folder structure và sử dụng module trong tf
+- Cách sử dụng tổ chức quản lý biến bằng tfvars
 
 ## Nội dung chính
 - Launch Template

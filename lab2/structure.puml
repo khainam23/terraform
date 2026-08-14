@@ -1,0 +1,35 @@
+@startuml
+
+title AWS Application Architecture
+
+cloud "Internet" as internet
+
+rectangle "Application Load Balancer (ALB)" as alb
+
+rectangle "EC2 #1\n\nLaunch Template" as ec2_1
+rectangle "EC2 #2\n\nLaunch Template" as ec2_2
+
+rectangle "Auto Scaling Group\n\nMin: 2\nDesired: 2\nMax: 4" as asg
+
+rectangle "Scale Out\n\nEC2 #3 → #4" as scale_out
+
+rectangle "S3" as s3 {
+    rectangle "Log Bucket\n\nVersioning: ON\n\n30 days → Glacier" as bucket
+}
+
+rectangle "IAM Role\n\nAllow: S3 Write" as iam
+
+
+internet --> alb
+
+alb --> ec2_1 : distribute traffic
+alb --> ec2_2 : distribute traffic
+
+ec2_1 --> asg
+ec2_2 --> asg
+
+asg --> scale_out : CPU > 70%
+
+iam --> bucket : PutObject only
+
+@enduml
