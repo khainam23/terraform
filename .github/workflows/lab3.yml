@@ -1,0 +1,63 @@
+name: Lab 3 - Terraform CI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  terraform-quality:
+    name: Validate + lint + scan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: lab3
+
+    env:
+      TF_VAR_aws_region: ap-southeast-1
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Install TFLint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+          tflint --version
+
+      - name: Terraform format check
+        run: terraform fmt -check -diff -recursive
+
+      - name: Terraform init
+        run: terraform init -backend=false -input=false
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: TFLint
+        run: tflint --recursive --format compact
+
+      - name: Trivy config scan
+        uses: aquasecurity/trivy-action@v0.30.0
+        with:
+          scan-type: 'config'
+          scan-ref: 'lab3'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "Terraform validation, TFLint, and Trivy config scan completed."
+          echo "No self-hosted SonarQube required; this workflow uses free tooling only."
