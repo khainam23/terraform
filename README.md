@@ -65,5 +65,30 @@ Dự án này lưu trữ các bài học, lab và ví dụ về Infrastructure a
 
 ---
 
+## Lab 3
+
+### Mục tiêu
+- Hiểu ECR và ECS (so sánh Fargate vs EC2 launch types)
+- So sánh ECS vs EKS để chọn giải pháp phù hợp
+- Quản lý secrets (Cách dùng AWS Systems Manager - Parameter Store, AWS Secrets Manager, AWS KMS (Key Management Service))
+- Viết pipeline build và deploy với GitHub Actions
+- Tích hợp GitHub với AWS cho CI/CD
+- Áp dụng IAM theo principle of least privilege
+- Thiết lập luồng CI/CD từ code đến hạ tầng ( IaC )
+- Tìm hiểu công cụ kiểm thử và bảo mật: SonarQube, Trivy, Snyk, Checkov, Terragrunt
+- Học cách sử dụng module có sẵn trong terraform ([Terraform Registry](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest)) thay vì tự viết từng cái
+- Tổng quan về OpenTofu (lựa chọn thay thế Terraform nếu cần)
+
+### Nội dung chính
+- Docker image và ECR (build, push, versioning)
+- ECS Task Definition, Service, và cách chọn Fargate/EC2
+- Xây dựng GitHub Actions workflow mẫu cho CI/CD
+- Quản lý secrets và biến môi trường an toàn
+- Tích hợp kiểm thử bảo mật (SAST/DAST) và IaC scanning
+- Các bước vận hành: rollback, monitoring, logging
+- Tìm hiểu về RDS
+
+---
+
 ## Ghi chú
 Mỗi lab có thể được bổ sung và cập nhật theo tiến độ học tập.

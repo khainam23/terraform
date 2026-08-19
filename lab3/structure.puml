@@ -1,0 +1,67 @@
+@startuml
+title Week 3 - AWS Container CI/CD Architecture
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor Developer
+
+cloud "GitHub" {
+    rectangle "GitHub Repository" as repo
+    rectangle "GitHub Actions\nCI/CD Pipeline" as actions
+}
+
+cloud "AWS" {
+
+    rectangle "IAM" {
+        rectangle "GitHub OIDC\nIAM Role" as oidc
+    }
+
+    rectangle "Amazon ECR" as ecr {
+        rectangle "examix-app\nDocker Image" as image
+    }
+
+    rectangle "VPC" {
+
+        rectangle "Public Subnets" {
+            rectangle "Application Load Balancer\n(ALB)" as alb
+        }
+
+        rectangle "Private Subnets" {
+
+            rectangle "ECS Cluster" as cluster {
+                rectangle "ECS Service" as service {
+                    rectangle "Fargate Task 1\nContainer :8000" as task1
+                    rectangle "Fargate Task 2\nContainer :8000" as task2
+                }
+            }
+        }
+    }
+
+    rectangle "Target Group\nHealth Check: /health" as tg
+
+    rectangle "CloudWatch Logs" as logs
+}
+
+Developer --> repo : git push
+
+repo --> actions : trigger workflow
+
+actions --> oidc : OIDC\nAssumeRole
+
+actions --> ecr : docker build\n& docker push
+
+ecr --> image
+
+image --> service : Pull image
+
+actions --> service : Deploy new\nTask Definition
+
+alb --> tg : Forward HTTP :80
+tg --> task1 : HTTP :8000
+tg --> task2 : HTTP :8000
+
+task1 --> logs : stdout/stderr
+task2 --> logs : stdout/stderr
+
+@enduml
