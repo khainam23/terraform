@@ -48,7 +48,7 @@ jobs:
         run: tflint --recursive --format compact
 
       - name: Trivy config scan
-        uses: aquasecurity/trivy-action@v0.30.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: 'config'
           scan-ref: 'lab3'
